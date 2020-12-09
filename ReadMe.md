@@ -19,25 +19,6 @@ All five datasets were merged in order to obtain a large enough sample. Descript
 Missing values were first replaced with na and later, during model preparation, were imputed with the mean for that variable. Several features also needed to be created for proper model performance. These included Home_Half_Win and Home_Win which represent a binary outcome for whether or not the home team was winning at half and/or won the match (1 being a win, 0 being a loss or draw).
 
 
-```python
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-```
-
-
-```python
-#Read in all data
-engl = pd.read_csv("Engl_season-1819.csv")
-germ = pd.read_csv("Germ_season-1819.csv")
-fren = pd.read_csv("Fren_season-1819.csv")
-ital = pd.read_csv("Ital_season-1819.csv")
-span = pd.read_csv("Span_season-1819.csv")
-```
-
-
-```python
 ### Variable Descrpitions
 
 #Div = League Division
@@ -65,37 +46,7 @@ span = pd.read_csv("Span_season-1819.csv")
 #AY = Away Team Yellow Cards
 #HR = Home Team Red Cards
 #AR = Away Team Red Cards
-```
 
-
-```python
-### Data Cleaning / Wrangling
-#Combine all dataframes
-overall = pd.concat([engl,germ,fren,ital,span])
-```
-
-
-```python
-#Impute missing values
-overall.replace('',np.nan,inplace = True)
-```
-
-
-```python
-#Take a subset of the columns (filtering out betting data)
-over_red = overall.iloc[:,0:23]
-```
-
-
-```python
-### Create relevant features
-#Create columns for if it was a win at halftime
-boole = over_red.HTR == "H"
-over_red["Home_Half_Win"] = boole.astype(int)
-
-boole = over_red.FTR == "H"
-over_red["Home_Win"] = boole.astype(int)
-```
 
 ### Exploring the Data
 Based on summary statistics, it appears not only that the home team won more often than the away team (60% of the time), but that the home team also seems to perform better on average in nearly every metric, getting more shots with greater accuracy as well as committing fewer fouls leading to fewer bookings (yellow and red cards). This leads us to believe initially that most factors improve while playing at home. The question we must answer however is which of these factors are most important in helping a team win at home.
@@ -103,31 +54,8 @@ Based on summary statistics, it appears not only that the home team won more oft
 The pattern of performing better at home also seems to be true accross each division in the dataset as seen below, making it more appropriate to collapse the dataset accross the division factor. It does appear that the German and Italian leagues slightly outperform the other divisions in some aspects of the match, but these differences don't seem to be significant and therefore will not be considered in modeling.
 
 
-```python
-### Exploratory Data Analysis
-soccer_df = over_red[['FTHG','FTAG','HS','AS','HST','AST','HF','AF','HC','AC','HY','AY','HR','AR','Home_Win']]
-```
-
-
-```python
-no_draws = over_red[over_red['FTR']!='D']
-print("% Wins by Home Team: ", round(no_draws.Home_Win.mean()*100,0))
-```
-
     % Wins by Home Team:  60.0
     
-
-
-```python
-print("Mean Differences (Home - Away) Per Game: ", "\n",
-      "Goals Scored: ", round(soccer_df.FTHG.mean() - soccer_df.FTAG.mean(),3), "\n",
-      "Shots on Target: ", round(soccer_df.HST.mean() - soccer_df.AST.mean(),3), "\n",
-      "Corner Kicks Taken: ", round(soccer_df.HC.mean() - soccer_df.AC.mean(),3), "\n",
-      "Fouls Committed: ", round(soccer_df.HF.mean() - soccer_df.AF.mean(),3), "\n",
-      "Yellow Cards: ", round(soccer_df.HY.mean() - soccer_df.AY.mean(),3), "\n",
-      "Red Cards: ", round(soccer_df.HR.mean() - soccer_df.AR.mean(),3))
-```
-
     Mean Differences (Home - Away) Per Game:  
      Goals Scored:  0.339 
      Shots on Target:  0.964 
@@ -135,18 +63,6 @@ print("Mean Differences (Home - Away) Per Game: ", "\n",
      Fouls Committed:  -0.274 
      Yellow Cards:  -0.273 
      Red Cards:  -0.032
-    
-
-
-```python
-print("Percent Differences (Home vs. Away) Per Game: ", "\n",
-      "Goals Scored: ", round( (((soccer_df.FTHG.mean() - soccer_df.FTAG.mean())) / soccer_df.FTAG.mean()) *100), "% Increase", "\n",
-      "Shots on Target: ", round( (((soccer_df.HST.mean() - soccer_df.AST.mean())) / soccer_df.AST.mean()) *100), "% Increase", "\n",
-      "Corner Kicks Taken: ", round( (((soccer_df.HC.mean() - soccer_df.AC.mean())) / soccer_df.AC.mean()) *100), "% Increase", "\n",
-      "Fouls Committed: ", abs(round( (((soccer_df.HF.mean() - soccer_df.AF.mean())) / soccer_df.AF.mean()) *100)), "% Decrease", "\n",
-      "Yellow Cards: ", abs(round( (((soccer_df.HY.mean() - soccer_df.AY.mean())) / soccer_df.AY.mean()) *100)), "% Decrease", "\n",
-      "Red Cards: ", abs(round( (((soccer_df.HR.mean() - soccer_df.AR.mean())) / soccer_df.AR.mean()) *100)), "% Decrease")
-```
 
     Percent Differences (Home vs. Away) Per Game:  
      Goals Scored:  28 % Increase 
@@ -158,63 +74,11 @@ print("Percent Differences (Home vs. Away) Per Game: ", "\n",
     
 
 
-```python
-print(" Avg Goals Scored by Home Team:", round(overall['FTHG'].mean(),2), "\n",
-     "Stan. Deviation of Home Goals:", round(overall['FTHG'].std(),2), "\n",
-     "Avg Goals Scored by Away Team:", round(overall['FTAG'].mean(),2), "\n",
-     "Stan. Deviation of Away Goals:", round(overall['FTAG'].std(),2))
-```
-
-     Avg Goals Scored by Home Team: 1.54 
-     Stan. Deviation of Home Goals: 1.28 
-     Avg Goals Scored by Away Team: 1.2 
-     Stan. Deviation of Away Goals: 1.16
-    
-
-
-```python
-sns.barplot(data=over_red,x="Div",y="Home_Win")
-```
-
-
-
-
-    <matplotlib.axes._subplots.AxesSubplot at 0x2aae21abf70>
-
-
-
 
 ![png](output_18_1.png)
 
 
-
-```python
-# Draw a nested barplot by species and sex
-sns.boxplot(data=over_red,x='Div',y='HST')
-```
-
-
-
-
-    <matplotlib.axes._subplots.AxesSubplot at 0x2aae2208ac0>
-
-
-
-
 ![png](output_19_1.png)
-
-
-
-```python
-sns.boxplot(data=over_red,x='Div',y='AST')
-```
-
-
-
-
-    <matplotlib.axes._subplots.AxesSubplot at 0x2aae22408e0>
-
-
 
 
 ![png](output_20_1.png)
@@ -228,42 +92,7 @@ In order to answer our questions of interest, several machine learning models we
 
 Because our model will contain 14 explanatory variables, regression models like ridge, lasso, and k nearest neighbors were used to help determine which factors of the model were of most importance while penalizing less signficant factors in the model. For comparison, decision tree, multinomial naive bayes, and support vector regression models were also considered. In order to assess model performance, the mean squared error will be assessed for both the training and testing datasets to uncover any under or over fitting of the data. This was coupled with the f1 and accuracy score for each model.
 
-
-```python
-from sklearn.preprocessing import LabelEncoder, OneHotEncoder
-from sklearn.impute import SimpleImputer
-from sklearn.model_selection import train_test_split
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.metrics import f1_score, accuracy_score
-from sklearn.linear_model import LinearRegression
-from sklearn.linear_model import Lasso
-from sklearn.linear_model import Ridge, RidgeCV
-from sklearn.neighbors import KNeighborsRegressor
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import mean_squared_error, r2_score
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.svm import SVR
-from sklearn.model_selection import GridSearchCV
-from sklearn.model_selection import cross_val_score
-```
-
-
-```python
-#Split the data into explanatory and response variables and train and test data
-y = soccer_df['Home_Win']
-X = soccer_df[['FTHG','FTAG','HS','AS','HST','AST','HF','AF','HC','AC','HY','AY','HR','AR']]
-
-from sklearn.impute import SimpleImputer
-Xtrain, Xtest, ytrain, ytest = train_test_split(X, y, test_size=.30, random_state=100)
-
-#Impute missing values with the mean
-Xtrain = Xtrain.fillna(Xtrain.mean())
-Xtest = Xtest.fillna(Xtest.mean())
-```
-
 ### Fitting Initial Models
-
 
 ```python
 lm = LinearRegression()
@@ -343,7 +172,6 @@ print(f1_score(ytest,yhat_knn.round(),average='weighted'))
     0.6781331687504717
     
 
-
 ```python
 dt = DecisionTreeRegressor(min_samples_leaf=3)
 dt.fit(Xtrain,ytrain)
@@ -363,7 +191,6 @@ print(f1_score(ytest,yhat_dt.round(),average='weighted'))
     0.6141216258769174
     
 
-
 ```python
 nb = MultinomialNB()
 nb.fit(Xtrain, ytrain)
@@ -382,7 +209,6 @@ print(f1_score(ytest,yhat_nb.round(),average='weighted'))
     0.666058394160584
     0.6660034664200571
     
-
 
 ```python
 svr = SVR()
@@ -470,14 +296,6 @@ clf.fit(Xtrain, ytrain)
 clf.best_params_
 ```
 
-
-
-
-    {'n_neighbors': 21}
-
-
-
-
 ```python
 knn = KNeighborsRegressor(n_neighbors=21)
 knn.fit(Xtrain,ytrain)
@@ -499,18 +317,6 @@ print(f1_score(ytest,yhat_knn.round(),average='weighted'))
 With optimized hyperparameters, both the Lasso and Ridge regression models performed the best in predicting home wins based on the explanatory variables, with f1 and accuracy scores of about 0.98. However, the lasso regression model had a lower mean squared error than the ridge model and will thus be considered in examining feature extraction and interpretation/
 
 Based on an evaluation of feature importance from this optimized model, it appears that the most important factors in predicting home wins were goals scored, shots on target, and number of red cards each home and away team had. However, because goals scored are inseperable from the result of the game, a model was also considered that elminated this factor and is expounded on below. After accounting for this factor, the next most important factor in improving a win at home for the home team is shots on target followed by red cards received.
-
-
-```python
-# get importance
-importance = lasso.coef_
-# summarize feature importance
-for i,v in enumerate(importance):
-	print('Feature: %0d, Score: %.5f' % (i,v))
-# plot feature importance
-plt.bar([x for x in range(len(importance))], importance)
-plt.show()
-```
 
     Feature: 0, Score: 0.23030
     Feature: 1, Score: -0.18864
@@ -534,21 +340,6 @@ plt.show()
 
 ### Examining a Model without Goals as an Explanatory Variable
 
-
-```python
-#Model without Goals
-y_n = soccer_df['Home_Win']
-X_n = soccer_df[['HS','AS','HST','AST','HF','AF','HC','AC','HY','AY','HR','AR']]
-
-from sklearn.impute import SimpleImputer
-Xtrain, Xtest, ytrain, ytest = train_test_split(X_n, y_n, test_size=.30, random_state=100)
-
-#Impute missing values with the mean
-Xtrain = Xtrain.fillna(Xtrain.mean())
-Xtest = Xtest.fillna(Xtest.mean())
-```
-
-
 ```python
 #Fit new Lasso model with updated hyperparameter and data without goals
 from sklearn.linear_model import LassoCV
@@ -571,18 +362,6 @@ print(f1_score(ytest,yhat_lasso.round(),average='weighted'))
     0.7317518248175182
     0.7302682346959217
     
-
-
-```python
-# get importance
-importance = lasso.coef_
-# summarize feature importance
-for i,v in enumerate(importance):
-	print('Feature: %0d, Score: %.5f' % (i,v))
-# plot feature importance
-plt.bar([x for x in range(len(importance))], importance)
-plt.show()
-```
 
     Feature: 0, Score: -0.01398
     Feature: 1, Score: 0.00757
