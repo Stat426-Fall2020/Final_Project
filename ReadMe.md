@@ -57,20 +57,20 @@ The pattern of performing better at home also seems to be true accross each divi
     % Wins by Home Team:  60.0
     
     Mean Differences (Home - Away) Per Game:  
-     Goals Scored:  0.339 
-     Shots on Target:  0.964 
-     Corner Kicks Taken:  1.066 
-     Fouls Committed:  -0.274 
-     Yellow Cards:  -0.273 
-     Red Cards:  -0.032
+     Goals Scored:       0.339 
+     Shots on Target:    0.964 
+     Corner Kicks Taken: 1.066 
+     Fouls Committed:   -0.274 
+     Yellow Cards:      -0.273 
+     Red Cards:         -0.032
 
     Percent Differences (Home vs. Away) Per Game:  
-     Goals Scored:  28 % Increase 
-     Shots on Target:  24 % Increase 
-     Corner Kicks Taken:  24 % Increase 
-     Fouls Committed:  2 % Decrease 
-     Yellow Cards:  13 % Decrease 
-     Red Cards:  28 % Decrease
+     Goals Scored:       28 % Increase 
+     Shots on Target:    24 % Increase 
+     Corner Kicks Taken: 24 % Increase 
+     Fouls Committed:     2 % Decrease 
+     Yellow Cards:       13 % Decrease 
+     Red Cards:          28 % Decrease
     
 
 
@@ -135,28 +135,10 @@ Based on an evaluation of feature importance from this optimized model, it appea
 
 
 ### Examining a Model without Goals as an Explanatory Variable
-
-```python
-#Fit new Lasso model with updated hyperparameter and data without goals
-from sklearn.linear_model import LassoCV
-lscv = LassoCV(n_alphas=100, normalize=True)
-lscv.fit(Xtrain, ytrain)
-
-#lscv.alpha_
-
-lasso = Lasso(alpha=lscv.alpha_)
-lasso.fit(Xtrain,ytrain)
-yhat_lasso = lasso.predict(Xtest)
-
-mse_lass = mean_squared_error(ytest, yhat_lasso)
-print(np.sqrt(mse_lass))
-print(accuracy_score(ytest,yhat_lasso.round()))
-print(f1_score(ytest,yhat_lasso.round(),average='weighted'))
-```
-
-    0.42079149568745594
-    0.7317518248175182
-    0.7302682346959217
+Lasso Model without goals scored as an explanatory variable:
+    MSE: 0.42079149568745594
+    Accuracy: 0.7317518248175182
+    F1 Score: 0.7302682346959217
     
 
     Feature: 0, Score: -0.01398
