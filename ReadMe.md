@@ -227,7 +227,8 @@ print(f1_score(ytest,yhat_svr.round(),average='weighted'))
     0.2832441262466822 0.30408745703625445
     0.9105839416058394
     0.914425392401046
-    
+
+![png](output_42_1.png)
 
 ### Model Improvement & Optimization
 
