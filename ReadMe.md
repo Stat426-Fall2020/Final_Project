@@ -228,6 +228,10 @@ print(f1_score(ytest,yhat_svr.round(),average='weighted'))
     0.9105839416058394
     0.914425392401046
 
+![png](First_mse_comp.png)
+
+![png](First_score_comp.png)
+
 ### Model Improvement & Optimization
 
 Based on the mean squared error, accuracy score, and f1 score for each model, several models seemed to have performed well while others appear to have overfit the data. Because the mse both the support vector and decision tree regression models was quite a bit higher for the testing than the training data, it appears these models overfit the data and will no longer be considered.
