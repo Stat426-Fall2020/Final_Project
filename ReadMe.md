@@ -1,5 +1,7 @@
 # Examining Effects of Home Field Advantage in European Soccer
 
+![png](Home_Field.png)
+
 ## Introduction
 
 ### Research Question
