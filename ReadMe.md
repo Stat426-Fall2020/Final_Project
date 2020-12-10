@@ -140,19 +140,20 @@ Lasso Model without goals scored as an explanatory variable:
   - Accuracy: 0.7317518248175182
   - F1 Score: 0.7302682346959217
     
-
-    Feature: 0, Score: -0.01398
-    Feature: 1, Score: 0.00757
-    Feature: 2, Score: 0.08074
-    Feature: 3, Score: -0.07494
-    Feature: 4, Score: -0.00690
-    Feature: 5, Score: -0.00272
-    Feature: 6, Score: -0.01955
-    Feature: 7, Score: 0.00802
-    Feature: 8, Score: -0.02004
-    Feature: 9, Score: -0.00036
-    Feature: 10, Score: -0.13964
-    Feature: 11, Score: 0.09090
+    
+Feature Importance:
+    - Feature: 0, Score: -0.01398
+    - Feature: 1, Score: 0.00757
+    - Feature: 2, Score: 0.08074
+    - Feature: 3, Score: -0.07494
+    - Feature: 4, Score: -0.00690
+    - Feature: 5, Score: -0.00272
+    - Feature: 6, Score: -0.01955
+    - Feature: 7, Score: 0.00802
+    - Feature: 8, Score: -0.02004
+    - Feature: 9, Score: -0.00036
+    - Feature: 10, Score: -0.13964
+    - Feature: 11, Score: 0.09090
     
 
 
