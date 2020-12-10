@@ -227,7 +227,6 @@ print(f1_score(ytest,yhat_svr.round(),average='weighted'))
     0.2832441262466822 0.30408745703625445
     0.9105839416058394
     0.914425392401046
-    
 
 ### Model Improvement & Optimization
 
@@ -235,82 +234,9 @@ Based on the mean squared error, accuracy score, and f1 score for each model, se
 
 The Lasso, Ridge, and K Nearest Neighbors models all seemed to perform the best without overfitting, based on their f1 and accuracy scores as well as the mean squared errors. Using grid searching techniques, optimization was performed for each of the model's hyperparameters. For lasso, 100 different alpha tuning parameters were assessed and the optimal parameter can be seen below. A similar process was done for ridge, with 10 different tuning parameters. Lastly, k nearest neighbor tuning parameters with a range of 30 different groupings were performed. Each model was then fit once again using these optimized tuning parameters.
 
+![png](output_42_1.png)
 
-```python
-#Fit new Lasso model with optimized hyperparameter
-from sklearn.linear_model import LassoCV
-lscv = LassoCV(n_alphas=100, normalize=True)
-lscv.fit(Xtrain, ytrain)
-
-#lscv.alpha_
-
-lasso = Lasso(alpha=lscv.alpha_)
-lasso.fit(Xtrain,ytrain)
-yhat_lasso = lasso.predict(Xtest)
-
-mse_lass = mean_squared_error(ytest, yhat_lasso)
-print(np.sqrt(mse_lass))
-print(accuracy_score(ytest,yhat_lasso.round()))
-print(f1_score(ytest,yhat_lasso.round(),average='weighted'))
-```
-
-    0.30418486744295803
-    0.9817518248175182
-    0.9880003726973718
-    
-
-
-```python
-#Fit new Ridge model with optimized hyperparameter
-from sklearn.linear_model import RidgeCV
-alphas = [0.000001, 0.00001, 0.0001, 0.001, 0.01, 0.1,0.5, 1,10,100]
-ricv = RidgeCV(alphas=alphas, normalize=True)
-ricv.fit(Xtrain, ytrain)
-
-ridge = Ridge(ricv.alpha_)
-ridge.fit(Xtrain,ytrain)
-yhat_ridge_train = ridge.predict(Xtrain)
-yhat_ridge = ridge.predict(Xtest)
-
-mse_ridge_train = mean_squared_error(ytrain,yhat_ridge_train)
-mse_ridge = mean_squared_error(ytest, yhat_ridge)
-print(np.sqrt(mse_ridge))
-
-print(accuracy_score(ytest,yhat_ridge.round()))
-print(f1_score(ytest,yhat_ridge.round(),average='weighted'))
-```
-
-    0.4207834229193695
-    0.7317518248175182
-    0.7302682346959217
-    
-
-
-```python
-#Fit new Knn model with optimized hyperparameter
-parameters = {'n_neighbors':list(range(1,30))}
-knn = KNeighborsRegressor()
-clf = GridSearchCV(knn, parameters, cv=10, scoring='neg_mean_squared_error')
-clf.fit(Xtrain, ytrain)
-
-clf.best_params_
-```
-
-```python
-knn = KNeighborsRegressor(n_neighbors=21)
-knn.fit(Xtrain,ytrain)
-yhat_knn = knn.predict(Xtest)
-
-mse_knn = mean_squared_error(ytest, yhat_knn)
-print(np.sqrt(mse_knn))
-print(accuracy_score(ytest,yhat_knn.round()))
-print(f1_score(ytest,yhat_knn.round(),average='weighted'))
-```
-
-    0.45498036633875183
-    0.6879562043795621
-    0.6862303954626027
-    
+![png](Model_comp.png)
 
 ## Model Selection & Results
 
