@@ -21,31 +21,29 @@ Missing values were first replaced with na and later, during model preparation, 
 
 ### Variable Descrpitions
 
-#Div = League Division
-#Date = Match Date (dd/mm/yy)
-#HomeTeam = Home Team
-#AwayTeam = Away Team
-#FTHG = Full Time Home Team Goals
-#FTAG = Full Time Away Team Goals
-#FTR = Full Time Result (H=Home Win, D=Draw, A=Away Win)
-#HTHG = Half Time Home Team Goals
-#HTAG = Half Time Away Team Goals
-#HTR = Half Time Result (H=Home Win, D=Draw, A=Away Win)
-#Referee = Match Referee
-#HS = Home Team Shots
-#AS = Away Team Shots
-#HST = Home Team Shots on Target
-#AST = Away Team Shots on Target
-#HC = Home Team Corners
-#AC = Away Team Corners
-#HF = Home Team Fouls Committed
-#AF = Away Team Fouls Committed
-#HO = Home Team Offsides
-#AO = Away Team Offsides
-#HY = Home Team Yellow Cards
-#AY = Away Team Yellow Cards
-#HR = Home Team Red Cards
-#AR = Away Team Red Cards
+ - Div = League Division
+ - Date = Match Date (dd/mm/yy)
+ - HomeTeam = Home Team
+ - AwayTeam = Away Team
+ - FTHG = Full Time Home Team Goals
+ - FTAG = Full Time Away Team Goals
+ - FTR = Full Time Result (H=Home Win, D=Draw, A=Away Win)
+ - HTHG = Half Time Home Team Goals
+ - HTAG = Half Time Away Team Goals
+ - HTR = Half Time Result (H=Home Win, D=Draw, A=Away Win)
+ - Referee = Match Referee
+ - HS = Home Team Shots
+ - AS = Away Team Shots
+ - HST = Home Team Shots on Target
+ - AST = Away Team Shots on Target
+ - HC = Home Team Corners
+ - AC = Away Team Corners
+ - HF = Home Team Fouls Committed
+ - AF = Away Team Fouls Committed
+ - HY = Home Team Yellow Cards
+ - AY = Away Team Yellow Cards
+ - HR = Home Team Red Cards
+ - AR = Away Team Red Cards
 
 
 ### Exploring the Data
@@ -94,139 +92,9 @@ Because our model will contain 14 explanatory variables, regression models like 
 
 ### Fitting Initial Models
 
-```python
-lm = LinearRegression()
-lm.fit(Xtrain,ytrain)
-yhat_test = lm.predict(Xtest)
-yhat_train = lm.predict(Xtrain)
+![png](First_mse_comp.png)
 
-mse_lm_tt = mean_squared_error(ytest, yhat_test)
-print(np.sqrt(mean_squared_error(ytest, yhat_test)),np.sqrt(mse_lm_tt))
-
-print(accuracy_score(ytest,yhat_test.round()))
-print(f1_score(ytest,yhat_test.round(),average='weighted'))
-```
-
-    0.3041629586642579 0.3041629586642579
-    0.9817518248175182
-    0.9880003726973718
-    
-
-
-```python
-lasso = Lasso(alpha=0.5)
-lasso.fit(Xtrain,ytrain)
-yhat_lasso_train = lasso.predict(Xtrain)
-yhat_lasso = lasso.predict(Xtest)
-
-mse_lass_train = mean_squared_error(ytrain,yhat_lasso_train)
-mse_lass = mean_squared_error(ytest, yhat_lasso)
-print(np.sqrt(mse_lass_train),np.sqrt(mse_lass))
-
-print(accuracy_score(ytest,yhat_lasso.round()))
-print(f1_score(ytest,yhat_lasso.round(),average='weighted'))
-```
-
-    0.4968158880128808 0.4982361444356948
-    0.5437956204379562
-    0.3830995151075909
-    
-
-
-```python
-ridge = Ridge()
-ridge.fit(Xtrain,ytrain)
-yhat_ridge_train = ridge.predict(Xtrain)
-yhat_ridge = ridge.predict(Xtest)
-
-mse_ridge_train = mean_squared_error(ytrain,yhat_ridge_train)
-mse_ridge = mean_squared_error(ytest, yhat_ridge)
-print(np.sqrt(mse_ridge_train),np.sqrt(mse_ridge))
-
-print(accuracy_score(ytest,yhat_ridge.round()))
-print(f1_score(ytest,yhat_ridge.round(),average='weighted'))
-```
-
-    0.42732080214141693 0.4207871056399023
-    0.7317518248175182
-    0.7302682346959217
-    
-
-
-```python
-knn = KNeighborsRegressor(n_neighbors=10)
-knn.fit(Xtrain,ytrain)
-yhat_knn_train = knn.predict(Xtrain)
-yhat_knn = knn.predict(Xtest)
-
-mse_knn_train = mean_squared_error(ytrain,yhat_knn_train)
-mse_knn = mean_squared_error(ytest, yhat_knn)
-print(np.sqrt(mse_knn_train),np.sqrt(mse_knn))
-
-print(accuracy_score(ytest,yhat_knn.round()))
-print(f1_score(ytest,yhat_knn.round(),average='weighted'))
-```
-
-    0.42364577579504176 0.4553213351559261
-    0.6843065693430657
-    0.6781331687504717
-    
-
-```python
-dt = DecisionTreeRegressor(min_samples_leaf=3)
-dt.fit(Xtrain,ytrain)
-yhat_dt_train = dt.predict(Xtrain)
-yhat_dt = dt.predict(Xtest)
-
-mse_dt_train = mean_squared_error(ytrain,yhat_dt_train)
-mse_dt = mean_squared_error(ytest, yhat_dt)
-print(np.sqrt(mse_dt_train),np.sqrt(mse_dt))
-
-print(accuracy_score(ytest,yhat_dt.round()))
-print(f1_score(ytest,yhat_dt.round(),average='weighted'))
-```
-
-    0.2419545260930704 0.565108958193888
-    0.614963503649635
-    0.6141216258769174
-    
-
-```python
-nb = MultinomialNB()
-nb.fit(Xtrain, ytrain)
-yhat_nb_train = nb.predict(Xtrain)
-yhat_nb = nb.predict(Xtest)
-
-mse_nb_train = mean_squared_error(ytrain,yhat_nb_train)
-mse_nb = mean_squared_error(ytest,yhat_nb)
-print(np.sqrt(mse_nb_train),np.sqrt(mse_nb))
-
-print(accuracy_score(ytest,yhat_nb.round()))
-print(f1_score(ytest,yhat_nb.round(),average='weighted'))
-```
-
-    0.5800545007041731 0.5778768085322477
-    0.666058394160584
-    0.6660034664200571
-    
-
-```python
-svr = SVR()
-svr.fit(Xtrain, ytrain)
-yhat_svr_train = svr.predict(Xtrain)
-yhat_svr = svr.predict(Xtest)
-
-mse_svr_train = mean_squared_error(ytrain,yhat_svr_train)
-mse_svr = mean_squared_error(ytest, yhat_svr)
-print(np.sqrt(mse_svr_train),np.sqrt(mse_svr))
-
-print(accuracy_score(ytest,yhat_svr.round()))
-print(f1_score(ytest,yhat_svr.round(),average='weighted'))
-```
-
-    0.2832441262466822 0.30408745703625445
-    0.9105839416058394
-    0.914425392401046
+![png](First_score_comp.png)
 
 ### Model Improvement & Optimization
 
