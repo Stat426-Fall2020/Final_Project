@@ -136,9 +136,9 @@ Based on an evaluation of feature importance from this optimized model, it appea
 
 ### Examining a Model without Goals as an Explanatory Variable
 Lasso Model without goals scored as an explanatory variable:
-    MSE: 0.42079149568745594
-    Accuracy: 0.7317518248175182
-    F1 Score: 0.7302682346959217
+  - MSE: 0.42079149568745594
+  - Accuracy: 0.7317518248175182
+  - F1 Score: 0.7302682346959217
     
 
     Feature: 0, Score: -0.01398
